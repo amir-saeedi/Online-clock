@@ -1,5 +1,5 @@
 export function timeWorld(continent, capital) {
-  return fetch(`http://worldtimeapi.org/api/timezone/${continent}/${capital}`)
+  return fetch(`https://worldtimeapi.org/api/timezone/${continent}/${capital}`)
     .then((time) => time.json())
     .catch((e) => console.error(e));
 }
