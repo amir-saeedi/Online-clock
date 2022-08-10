@@ -139,8 +139,8 @@ export default function Alarm() {
       // Render a countdown
       return (
         <span>
-          {hours >= 10 ? hours : "0" + hours}:
-          {minutes >= 10 ? minutes : "0" + minutes}:
+          Alarm in {hours >= 10 ? hours : "0" + hours} :{" "}
+          {minutes >= 10 ? minutes : "0" + minutes} :{" "}
           {seconds >= 10 ? seconds : "0" + seconds}
         </span>
       );
@@ -177,7 +177,7 @@ export default function Alarm() {
             <h2>
               {SoonerAlarm() === -1 && (
                 <div>
-                  <h2>All alarms is off</h2>
+                  <h3x>All alarms is off</h3x>
                 </div>
               )}
               {SoonerAlarm() >= 0 && (
