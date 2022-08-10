@@ -127,20 +127,27 @@ export default function StopWatch() {
                           }
                     }
                   >
-                    <h3>{overallTime.length - index}</h3>
-                    <p>
-                      {lapTime[index].min > 10
-                        ? lapTime[index].min
-                        : "0" + lapTime[index].min}
-                      :
-                      {lapTime[index].sec > 10
-                        ? lapTime[index].sec
-                        : "0" + lapTime[index].sec}
-                    </p>
-                    <p>
-                      {data.min > 10 ? data.min : "0" + data.min}:
-                      {data.sec > 10 ? data.sec : "0" + data.sec}
-                    </p>
+                    <div>
+                      <h3>{overallTime.length - index}</h3>
+                    </div>
+                    <div>
+                      {" "}
+                      <p>
+                        {lapTime[index].min > 10
+                          ? lapTime[index].min
+                          : "0" + lapTime[index].min}
+                        :
+                        {lapTime[index].sec > 10
+                          ? lapTime[index].sec
+                          : "0" + lapTime[index].sec}
+                      </p>
+                    </div>
+                    <div>
+                      <p>
+                        {data.min > 10 ? data.min : "0" + data.min}:
+                        {data.sec > 10 ? data.sec : "0" + data.sec}
+                      </p>
+                    </div>
                   </li>
                 );
               })}

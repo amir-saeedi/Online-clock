@@ -1,11 +1,8 @@
 import React from "react";
 import Countdown from "react-countdown";
 import audio from "../alarm.mp3";
-// import ReactAudioPlayer from "react-audio-player";
 
 import { BottomNav } from "./NavSlde";
-// import SetTimer, { timeSaver } from "./subsidiaryComp/SetTimer";
-
 import TimeInput from "./subsidiaryComp/inputTimeLibrary/TimeInput";
 
 export default function Timer() {
@@ -74,7 +71,9 @@ export default function Timer() {
       // Render a countdown
       return (
         <span>
-          {hours}:{minutes}:{seconds}
+          {hours >= 10 ? hours : "0" + hours}:
+          {minutes >= 10 ? minutes : "0" + minutes}:
+          {seconds >= 10 ? seconds : "0" + seconds}
         </span>
       );
     }
@@ -102,7 +101,7 @@ export default function Timer() {
         <React.Fragment>
           <form onSubmit={handelStart}>
             <div className="card-title">
-              <h2>SET TIME</h2>
+              <h2 style={{ fontFamily: "cursive" }}>SET TIMER</h2>
               <TimeInput
                 name="input_time"
                 placeholder="11:12"

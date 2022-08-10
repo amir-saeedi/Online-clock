@@ -90,6 +90,11 @@ body {
   overflow: hidden;
   transition: all 0.5s;
 }
+a,
+.togglebtn {
+  font-family: cursive;
+  /* font-family: "Times New Roman", Times, serif; */
+}
 /* Clock style */
 .clock-style {
   display: flex;
@@ -262,7 +267,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 13% 10px 8%;
+  padding: 10px 15% 10px 8%;
   gap: 25px;
 }
 .card .card-body .card-body-title h3 {
@@ -298,6 +303,7 @@ body {
   color: var(--color-text);
 }
 .card .card-body .cardly h3 {
+  text-align: center;
   width: 30%;
 }
 .card .card-body .cardly h3 span {
@@ -306,17 +312,11 @@ body {
   font-size: 0.7rem;
 }
 .card .card-body .cardly p {
-  /* width: 30%; */
   font-size: 2rem;
 }
 .card .card-body .cardly > div {
   width: 30%;
 }
-/* .card-dark {
-  background: #5d666d;
-  box-shadow: 10px 10px 25px #4f575d, -10px -10px 25px #6b757d;
-} */
-
 @media screen and (max-width: 850px) {
   .cardly p {
     font-size: 1.2rem !important;
@@ -405,8 +405,9 @@ body {
 .togglebtn span {
   display: flex;
   justify-content: center;
-  align-content: center;
-  gap: 10px;
+  /* align-content: center; */
+  align-items: center;
+  gap: 5px;
 }
 .active-side-light {
   color: #e7e7e7 !important;

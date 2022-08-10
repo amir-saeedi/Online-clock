@@ -139,7 +139,9 @@ export default function Alarm() {
       // Render a countdown
       return (
         <span>
-          {hours}:{minutes}:{seconds}
+          {hours >= 10 ? hours : "0" + hours}:
+          {minutes >= 10 ? minutes : "0" + minutes}:
+          {seconds >= 10 ? seconds : "0" + seconds}
         </span>
       );
     }
