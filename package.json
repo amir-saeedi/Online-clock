@@ -1,5 +1,5 @@
 {
-  "name": "my-app",
+  "name": "clock-app",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -7,8 +7,15 @@
     "@testing-library/react": "^13.3.0",
     "@testing-library/user-event": "^13.5.0",
     "react": "^18.2.0",
+    "react-audio-player": "^0.17.0",
+    "react-countdown": "^2.3.2",
     "react-dom": "^18.2.0",
+    "react-icons": "^4.4.0",
+    "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",
+    "react-switch": "^7.0.0",
+    "react-time-input": "^1.0.1",
+    "styled-components": "^5.3.5",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
