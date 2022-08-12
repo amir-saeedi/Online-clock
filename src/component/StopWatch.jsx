@@ -4,15 +4,29 @@ import { FaEllipsisH, FaPlay, FaPause, FaStop, FaSync } from "react-icons/fa";
 import { BottomNav } from "./NavSlde";
 import { openNav } from "./subsidiaryComp/CardAdd";
 import SetTimer, { timeSaver } from "./subsidiaryComp/SetTimer";
+import TimerStyle from "./subsidiaryComp/TimerStyle";
+import { generateId } from "../utils/timeWorld";
+////////////////////////////////////////////////////////////
+// informationStateValue is organizes information in state
+const informationStateValue = (run, lap, start, btnDisable) => {
+  return {
+    run: run,
+    lap: lap,
+    start: start,
+    btnDisable: btnDisable,
+  };
+};
 
 export default function StopWatch() {
   const [state, setState] = React.useState(
-    setStateValue("start", "lap", false, true)
+    informationStateValue("start", "lap", false, true)
   );
   const [overallTime, setOverallTime] = React.useState([]);
   const [lapTime, setLapTime] = React.useState([]);
   const [time, setTime] = React.useState("00:00.00");
   const sv = React.useRef();
+  ///////////////////////////////////////////////////////
+  // Functions handels
   function handelStart() {
     const seterTime = {
       sec: +timeSaver?.sec - sv.current?.sec,
@@ -26,11 +40,11 @@ export default function StopWatch() {
     const start = state.start === true ? false : true;
     switch (state.run) {
       case "start":
-        return setState(setStateValue("pause", "lap", start, false));
+        return setState(informationStateValue("pause", "lap", start, false));
       case "pause":
-        return setState(setStateValue("resume", "reset", start, false));
+        return setState(informationStateValue("resume", "reset", start, false));
       case "resume":
-        return setState(setStateValue("pause", "lap", start, false));
+        return setState(informationStateValue("pause", "lap", start, false));
       default:
         return console.error("error");
     }
@@ -38,7 +52,10 @@ export default function StopWatch() {
   function handelLap() {
     switch (state.lap) {
       case "lap":
-        setOverallTime((d) => [timeSaver, ...d]);
+        setOverallTime((d) => [
+          { id: generateId(), timeSaver: timeSaver },
+          ...d,
+        ]);
         let stateSec = 0;
         let stateMin = 0;
         lapTime.forEach((data) => {
@@ -47,13 +64,14 @@ export default function StopWatch() {
         });
         return setLapTime((d) => [
           {
+            id: generateId(),
             sec: +Number.parseFloat(+timeSaver.sec - stateSec).toFixed(2),
             min: +timeSaver?.min - stateMin,
           },
           ...d,
         ]);
       case "reset":
-        setState(setStateValue("start", "lap", false, true));
+        setState(informationStateValue("start", "lap", false, true));
         setOverallTime([]);
         setLapTime([]);
         sv.current = {
@@ -65,14 +83,6 @@ export default function StopWatch() {
         console.error("error");
     }
   }
-  function setStateValue(run, lap, start, btnDisable) {
-    return {
-      run: run,
-      lap: lap,
-      start: start,
-      btnDisable: btnDisable,
-    };
-  }
   return (
     <React.Fragment>
       <div className="card" id="main">
@@ -80,14 +90,14 @@ export default function StopWatch() {
           <h2>
             {state.start === false && (
               <>
-                {time?.min < 10 ? "0" + time?.min : time?.min || "00"}:
-                {time?.sec < 10 ? "0" + time?.sec : time?.sec || "00.00"}
+                {time?.min ? <TimerStyle time={time?.min} /> : <>00</>}:
+                {time?.sec ? <TimerStyle time={time?.sec} /> : <>00.00</>}
               </>
             )}
             {state.start === true && (
               <SetTimer
                 timeState={`00:${time?.min || 0}:${time?.sec || 0}`}
-                needSec={false}
+                needSec={true}
                 StopWatch={10}
               />
             )}
@@ -112,7 +122,7 @@ export default function StopWatch() {
                 return (
                   <li
                     className={"cardly"}
-                    key={data.sec}
+                    key={data.id}
                     style={
                       index % 2 === 0
                         ? {
@@ -127,25 +137,17 @@ export default function StopWatch() {
                           }
                     }
                   >
+                    <h3>{overallTime.length - index}</h3>
                     <div>
-                      <h3>{overallTime.length - index}</h3>
-                    </div>
-                    <div>
-                      {" "}
                       <p>
-                        {lapTime[index].min > 10
-                          ? lapTime[index].min
-                          : "0" + lapTime[index].min}
-                        :
-                        {lapTime[index].sec > 10
-                          ? lapTime[index].sec
-                          : "0" + lapTime[index].sec}
+                        <TimerStyle time={lapTime[index].min} />:
+                        <TimerStyle time={lapTime[index].sec} toFixed={true} />
                       </p>
                     </div>
                     <div>
                       <p>
-                        {data.min > 10 ? data.min : "0" + data.min}:
-                        {data.sec > 10 ? data.sec : "0" + data.sec}
+                        <TimerStyle time={data.timeSaver.min} />:
+                        <TimerStyle time={data.timeSaver.sec} />
                       </p>
                     </div>
                   </li>

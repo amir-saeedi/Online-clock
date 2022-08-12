@@ -1,0 +1,163 @@
+/* Card style */
+.card {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding-top: 40px;
+  width: max(60%, 300px);
+  min-height: 550px;
+  max-height: 550px;
+  overflow: hidden;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-content: center;
+  transition: margin-left 0.5s;
+  margin-left: 50px;
+  border-radius: 35px;
+  background: var(--color-background);
+  box-shadow: 10px 10px 25px var(--color-box_shadow-dark),
+    -10px -10px 25px var(--color-box_shadow-light);
+  transition: all 0.5s;
+}
+.card .card-title {
+  padding-bottom: 25px;
+}
+.card .card-title h2 {
+  padding-top: 20px;
+  color: var(--color-card-title-h2);
+}
+.card .card-title p {
+  color: var(--color-text);
+}
+.card .card-add {
+  text-align: right;
+  color: var(--color-text);
+}
+.card .card-add svg {
+  margin-left: 10px;
+}
+.card .card-add_alarm {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 5%;
+  margin-top: 10px;
+}
+.card .card-add_alarm svg {
+  font-size: 3rem;
+  color: #ecf0f3;
+  padding: 15px;
+  border-radius: 50%;
+  background: #e5120a;
+  box-shadow: inset 13px 13px 12px #d51109, inset -13px -13px 12px #f5130b,
+    1px 1px 2px #b90f08, -1px -1px 2px #ff150c;
+  border: 1px solid #999;
+  z-index: 4;
+}
+.card .card-add_alarm::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #e4e8f1;
+  box-shadow: 6px 6px 12px var(--color-box_shadow-dark),
+    -6px -6px 12px var(--color-box_shadow-light);
+  margin-bottom: 65px;
+  z-index: 1;
+}
+.card .card-body {
+  min-height: 250px;
+  width: 100%;
+  padding-top: 10px;
+  border-radius: 20px;
+  background: var(--color-background);
+  box-shadow: 0px -5px 10px var(--color-box_shadow-light);
+  padding-bottom: 80px;
+  overflow: auto;
+}
+.card .card-body .card-body-title {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 15% 10px 8%;
+  gap: 25px;
+}
+.card .card-body .card-body-title h3 {
+  font-size: 18px;
+  color: var(--color-text);
+}
+.card .card-body .card-body-table {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--color-text);
+  color: var(--color-text);
+}
+.card .card-body .card-body-table p {
+  width: 30%;
+}
+.card .card-body .cardly {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-content: flex-end;
+  align-items: center;
+  gap: 10%;
+  padding: 20px 0;
+  margin: 10px 12px 25px;
+  border-radius: 20px;
+  background: var(--color-background);
+  box-shadow: 0 10px 20px var(--color-box_shadow-dark),
+    0px -5px 10px var(--color-box_shadow-light);
+  color: var(--color-text);
+}
+.card .card-body .cardly h3 {
+  text-align: center;
+  width: 30%;
+}
+.card .card-body .cardly h3 span {
+  display: block;
+  opacity: 0.8;
+  font-size: 0.7rem;
+}
+.card .card-body .cardly p {
+  font-size: 2rem;
+}
+.card .card-body .cardly > div {
+  width: 30%;
+}
+@media screen and (max-width: 850px) {
+  .cardly p {
+    font-size: 1.2rem !important;
+  }
+}
+@media screen and (max-width: 530px) {
+  .cardly h3 {
+    font-size: 1rem;
+  }
+  .cardly h3 span {
+    font-size: 0.5rem !important;
+  }
+  .cardly p {
+    font-size: 1rem !important;
+  }
+  .cardly svg {
+    font-size: 1rem;
+  }
+  .card .card-add_alarm {
+    margin-bottom: 22% !important;
+  }
+}

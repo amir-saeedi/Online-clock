@@ -3,6 +3,7 @@ import Countdown from "react-countdown";
 import audio from "../alarm.mp3";
 
 import { BottomNav } from "./NavSlde";
+import TimerStyle from "./subsidiaryComp/TimerStyle";
 import TimeInput from "./subsidiaryComp/inputTimeLibrary/TimeInput";
 
 export default function Timer() {
@@ -71,9 +72,9 @@ export default function Timer() {
       // Render a countdown
       return (
         <span>
-          {hours >= 10 ? hours : "0" + hours}:
-          {minutes >= 10 ? minutes : "0" + minutes}:
-          {seconds >= 10 ? seconds : "0" + seconds}
+          <TimerStyle time={hours} />:
+          <TimerStyle time={minutes} />:
+          <TimerStyle time={seconds} />
         </span>
       );
     }

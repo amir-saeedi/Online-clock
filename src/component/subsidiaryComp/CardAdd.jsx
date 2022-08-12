@@ -1,8 +1,8 @@
 import React from "react";
 import { FaPlus, FaEllipsisV } from "react-icons/fa";
-function toggleShowElement(element, act) {
+const toggleShowElement = (element, act) => {
   document.getElementById(`${element}`).style.display = act;
-}
+};
 export function openHandelAdd() {
   toggleShowElement("myModal", "block");
   window.onclick = function (event) {
@@ -23,4 +23,3 @@ export default function CardAdd() {
     </div>
   );
 }
-//

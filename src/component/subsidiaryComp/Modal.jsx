@@ -6,6 +6,9 @@ import Loading from "./Loading";
 
 export default function Modal({ handelAdd, Alarm = false }) {
   const [disableBtn, setDisableBtn] = React.useState(true);
+
+  ////////////////////////////////////////////////////////
+  // Functions handels
   function toggleShowElement(element, act) {
     document.getElementById(`${element}`).style.display = act;
   }
@@ -21,6 +24,7 @@ export default function Modal({ handelAdd, Alarm = false }) {
       setDisableBtn(false);
     }
   };
+
   if (Alarm)
     return (
       <div id="myModal" className="modal">
@@ -39,7 +43,7 @@ export default function Modal({ handelAdd, Alarm = false }) {
             >
               <TimeInput
                 name="input_time"
-                placeholder="11:12"
+                placeholder="07:30"
                 className="s-input -time input_time"
                 mountFocus="true"
                 onTimeChange={onTimeChangeHandler}
@@ -133,7 +137,7 @@ const StyledButton = styled.button`
   }
 `;
 
-export const PlaceInput = ({ handelAdd }) => {
+const PlaceInput = ({ handelAdd }) => {
   const [searchValue, setSearchValue] = React.useState("");
   const [results, setResults] = React.useState([]);
   const [dropdownActive, setDropdownActive] = React.useState(false);

@@ -7,9 +7,83 @@ import { generateId } from "../utils/timeWorld";
 import { openHandelAdd, openNav } from "./subsidiaryComp/CardAdd";
 import Modal from "./subsidiaryComp/Modal";
 import { BottomNav } from "./NavSlde";
+import TimerStyle from "./subsidiaryComp/TimerStyle";
 import { dragStart, dragEnter, drop } from "./subsidiaryComp/Drog";
 
 import audio from "../alarm.mp3";
+
+const informationUserTime = (setUserTime) => {
+  const dateUser = new Date();
+  return setUserTime({
+    hours: dateUser.getHours(),
+    min: dateUser.getMinutes(),
+    sec: dateUser.getSeconds(),
+  });
+};
+const SoonerAlarm = (userTime, InitialAlarm) => {
+  // get time and alarm && sort them
+  const myH = userTime.hours;
+  const myM = userTime.min;
+  const myS = userTime.sec;
+  const soonAlarm = [];
+  for (let i = 0; i < InitialAlarm.length; i++) {
+    if (InitialAlarm[i].checked) {
+      soonAlarm.push({
+        hours: +InitialAlarm[i].timeAlarm.split(":")[0],
+        min: +InitialAlarm[i].timeAlarm.split(":")[1],
+        checked: InitialAlarm[i].checked,
+        id: InitialAlarm[i].id,
+      });
+    }
+  }
+  soonAlarm.sort((a, b) =>
+    a.hours === b.hours ? a.min - b.min : a.hours - b.hours
+  );
+  // Set time for alarm
+  function valueSoonerTime(tomorrow, num) {
+    if (tomorrow) {
+      return (
+        24 * 60 -
+        (myH * 60 + myM + myS / 60) +
+        (soonAlarm[0].hours * 60 + soonAlarm[0].min)
+      );
+    } else {
+      return (
+        -(myH * 60 + myM + myS / 60) +
+        (soonAlarm[num].hours * 60 + soonAlarm[num].min)
+      );
+    }
+  }
+  //
+  if (soonAlarm.length > 0) {
+    if (soonAlarm.every((data) => myH > data.hours)) {
+      return valueSoonerTime(true, 0);
+    } else {
+      for (let i = 0; i < soonAlarm.length; i++) {
+        let number = soonAlarm.length - 1;
+        if (
+          soonAlarm[i].hours > myH ||
+          (soonAlarm[i].hours === myH && soonAlarm[i].min > myM)
+        ) {
+          return valueSoonerTime(false, i);
+        }
+        if (
+          soonAlarm[i].hours > myH ||
+          (soonAlarm[i].hours === myH && soonAlarm[i].min < myM)
+        ) {
+          return i === number
+            ? valueSoonerTime(true, 0)
+            : valueSoonerTime(false, i + 1);
+        }
+        if (soonAlarm[i].hours === myH && soonAlarm[i].min === myM) {
+          return 5 / 60;
+        }
+      }
+    }
+  } else {
+    return -1;
+  }
+};
 
 export default function Alarm() {
   const [userTime, setUserTime] = React.useState(null);
@@ -19,12 +93,7 @@ export default function Alarm() {
   const dragOverItem = React.useRef();
 
   React.useEffect(() => {
-    const dateUser = new Date();
-    setUserTime({
-      hours: dateUser.getHours(),
-      min: dateUser.getMinutes(),
-      sec: dateUser.getSeconds(),
-    });
+    informationUserTime(setUserTime);
     setInitialAlarm([
       {
         timeAlarm: "7:00",
@@ -38,17 +107,13 @@ export default function Alarm() {
       },
     ]);
   }, []);
+
   function handelDelete(data) {
     const id = InitialAlarm.findIndex((d) => d.id === data.id);
     setInitialAlarm((d) => [...d.slice(0, id), ...d.slice(id + 1, d.length)]);
   }
   const handleChange = (id) => {
-    const dateUser = new Date();
-    setUserTime({
-      hours: dateUser.getHours(),
-      min: dateUser.getMinutes(),
-      sec: dateUser.getSeconds(),
-    });
+    informationUserTime(setUserTime);
     const number = InitialAlarm.findIndex((d) => d.id === id);
     const copy = Object.assign([], InitialAlarm);
     copy[number].checked = !copy[number].checked;
@@ -60,76 +125,12 @@ export default function Alarm() {
   function handelAdd(e) {
     e.preventDefault();
     toggleShowElement("myModal", "none");
-    const dateUser = new Date();
-    setUserTime({
-      hours: dateUser.getHours(),
-      min: dateUser.getMinutes(),
-      sec: dateUser.getSeconds(),
-    });
+    informationUserTime(setUserTime);
     const time = e.target[0].value;
     setInitialAlarm((d) => [
       { timeAlarm: time, checked: true, id: generateId() },
       ...d,
     ]);
-  }
-  function SoonerAlarm() {
-    // get time and alarm && sort them
-    const myH = userTime.hours;
-    const myM = userTime.min;
-    const myS = userTime.sec;
-    const soonAlarm = [];
-    for (let i = 0; i < InitialAlarm.length; i++) {
-      if (InitialAlarm[i].checked) {
-        soonAlarm.push({
-          hours: +InitialAlarm[i].timeAlarm.split(":")[0],
-          min: +InitialAlarm[i].timeAlarm.split(":")[1],
-          checked: InitialAlarm[i].checked,
-          id: InitialAlarm[i].id,
-        });
-      }
-    }
-    soonAlarm.sort((a, b) =>
-      a.hours === b.hours ? a.min - b.min : a.hours - b.hours
-    );
-    // Set time for alarm
-    if (soonAlarm.length > 0) {
-      if (soonAlarm.every((data) => myH > data.hours)) {
-        return (
-          24 * 60 -
-          (myH * 60 + myM + myS / 60) +
-          (soonAlarm[0].hours * 60 + soonAlarm[0].min)
-        );
-      } else {
-        for (let i = 0; i < soonAlarm.length; i++) {
-          let number = soonAlarm.length - 1;
-          if (
-            soonAlarm[i].hours > myH ||
-            (soonAlarm[i].hours === myH && soonAlarm[i].min > myM)
-          ) {
-            return (
-              -(myH * 60 + myM + myS / 60) +
-              (soonAlarm[i].hours * 60 + soonAlarm[i].min)
-            );
-          }
-          if (
-            soonAlarm[i].hours > myH ||
-            (soonAlarm[i].hours === myH && soonAlarm[i].min < myM)
-          ) {
-            return i === number
-              ? 24 * 60 -
-                  (myH * 60 + myM + myS / 60) +
-                  (soonAlarm[0].hours * 60 + soonAlarm[0].min)
-              : -(myH * 60 + myM + myS / 60) +
-                  (soonAlarm[i + 1].hours * 60 + soonAlarm[i + 1].min);
-          }
-          if (soonAlarm[i].hours === myH && soonAlarm[i].min === myM) {
-            return 0;
-          }
-        }
-      }
-    } else {
-      return -1;
-    }
   }
   const renderer = ({ hours, minutes, seconds, completed }) => {
     if (completed) {
@@ -139,9 +140,8 @@ export default function Alarm() {
       // Render a countdown
       return (
         <span>
-          Alarm in {hours >= 10 ? hours : "0" + hours} :{" "}
-          {minutes >= 10 ? minutes : "0" + minutes} :{" "}
-          {seconds >= 10 ? seconds : "0" + seconds}
+          Alarm in <TimerStyle time={hours} /> : <TimerStyle time={minutes} /> :{" "}
+          <TimerStyle time={seconds} />
         </span>
       );
     }
@@ -156,15 +156,15 @@ export default function Alarm() {
     );
   };
   const ringer = () => {
+    const dateUser = new Date();
     setTimeout(() => {
-      const dateUser = new Date();
       setUserTime({
         hours: dateUser.getHours(),
         min: dateUser.getMinutes() + 1,
         sec: dateUser.getSeconds(),
       });
       ref.current.getApi().start();
-    }, [20000]);
+    }, [30000]);
   };
   return (
     <React.Fragment>
@@ -175,14 +175,16 @@ export default function Alarm() {
         {userTime && InitialAlarm && InitialAlarm?.length > 0 && (
           <div className="card-title">
             <h2>
-              {SoonerAlarm() === -1 && (
+              {SoonerAlarm(userTime, InitialAlarm) === -1 && (
                 <div>
-                  <h3x>All alarms is off</h3x>
+                  <h3>All alarms is off</h3>
                 </div>
               )}
-              {SoonerAlarm() >= 0 && (
+              {SoonerAlarm(userTime, InitialAlarm) >= 0 && (
                 <Countdown
-                  date={Date.now() + SoonerAlarm() * 60 * 1000}
+                  date={
+                    Date.now() + SoonerAlarm(userTime, InitialAlarm) * 60 * 1000
+                  }
                   renderer={renderer}
                   ref={(e) => (ref.current = e)}
                 />

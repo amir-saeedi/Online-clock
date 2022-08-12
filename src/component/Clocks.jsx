@@ -10,7 +10,37 @@ import Loading from "./subsidiaryComp/Loading";
 
 import { timeWorld, generateId } from "../utils/timeWorld";
 import ClockStyle from "./subsidiaryComp/ClockStyle";
-
+////////////////////////////////////////////////////
+// function for object States
+// InformationDataRequest is organizes information in addInitialContinents
+const informationDataRequest = (continent, capital, time, offset) => {
+  return {
+    id: generateId(),
+    continent: continent,
+    capital: capital,
+    time: time,
+    offset: offset,
+  };
+};
+// SetTimeInformation is organizes time in informationDataRequest
+const setTimeInformation = (result) => {
+  return result.datetime.slice(
+    result.datetime.indexOf("T") + 1,
+    result.datetime.indexOf(".")
+  );
+};
+// SetOffset shows request city offset behind/ahead or time zone to local time zone
+const setOffset = (userTime, requestTime) => {
+  const hours = +requestTime.split(":")[0] - +userTime.split(":")[0];
+  const mins = +requestTime.split(":")[1] - +userTime.split(":")[1];
+  if (hours * 60 + mins < 0) {
+    return `${Math.abs(hours)} hrs ${Math.abs(mins)} mins behind`;
+  } else if (hours * 60 + mins > 0) {
+    return `${Math.abs(hours)} hrs ${Math.abs(mins)} mins ahead`;
+  } else if (hours === 0 && mins === 0) {
+    return "Local time zone";
+  }
+};
 export default function Clocks() {
   const [userLocation, setUserLocation] = React.useState(null);
   const [addInitialContinents, setAddInitialContinents] = React.useState([]);
@@ -22,10 +52,10 @@ export default function Clocks() {
     timeWorld("Asia", "Tehran")
       .then((result) =>
         setUserLocation(
-          dataClock(
+          informationDataRequest(
             result.timezone.split("/")[0],
             result.timezone.split("/")[1],
-            dataClockTime(result),
+            setTimeInformation(result),
             result.utc_offset
           )
         )
@@ -42,10 +72,10 @@ export default function Clocks() {
         initialContinents[i].capital
       ).then((result) => {
         setAddInitialContinents((data) => [
-          dataClock(
+          informationDataRequest(
             initialContinents[i].continent,
             initialContinents[i].capital,
-            dataClockTime(result),
+            setTimeInformation(result),
             result.utc_offset
           ),
           ...data,
@@ -53,36 +83,8 @@ export default function Clocks() {
       });
     }
   }, []);
-  ////////////////////////////////////////////////////
-  // function for object States
-  function dataClock(continent, capital, time, offset) {
-    return {
-      id: generateId(),
-      continent: continent,
-      capital: capital,
-      time: time,
-      offset: offset,
-    };
-  }
-  function dataClockTime(result) {
-    return result.datetime.slice(
-      result.datetime.indexOf("T") + 1,
-      result.datetime.indexOf(".")
-    );
-  }
-  function setOffset(a, b) {
-    const h = +b.offset.split(":")[0] - +a.offset.split(":")[0];
-    const m = +b.offset.split(":")[1] - +a.offset.split(":")[1];
-    if (h < 0 || m < 0) {
-      return `${Math.abs(h)} hrs ${Math.abs(m)} mins behind`;
-    } else if (h > 0 || m > 0) {
-      return `${Math.abs(h)} hrs ${Math.abs(m)} mins ahead`;
-    } else if (h === 0 && m === 0) {
-      return "Local time zone";
-    }
-  }
   /////////////////////////////////////////////////////
-  // functions for handel add world time
+  // Functions handelers world time
   function toggleShowElement(element, act) {
     document.getElementById(`${element}`).style.display = act;
   }
@@ -92,7 +94,12 @@ export default function Clocks() {
     const capital = e.fields.timezone.split("/")[1];
     timeWorld(continent, capital).then((result) => {
       setAddInitialContinents((d) => [
-        dataClock(continent, capital, dataClockTime(result), result.utc_offset),
+        informationDataRequest(
+          continent,
+          capital,
+          setTimeInformation(result),
+          result.utc_offset
+        ),
         ...d,
       ]);
     });
@@ -104,8 +111,10 @@ export default function Clocks() {
       ...d.slice(id + 1, d.length),
     ]);
   }
+  /////////////////////////////////////////////////////
+  // Function loader
   const isLoadngUserTime = () => userLocation === null;
-  const isLoadngInitial = () => addInitialContinents === null;
+  // const isLoadngInitial = () => addInitialContinents === null;
 
   return (
     <React.Fragment>
@@ -118,14 +127,12 @@ export default function Clocks() {
             <p>{userLocation.capital} Daylight Time</p>
           </div>
         )}
-
         <div className="card-body">
           <div className="card-body-title">
             <h3>Word clock</h3>
             <CardAdd />
           </div>
           <ul>
-            {isLoadngInitial() && <Loading />}
             {addInitialContinents.length > 0 &&
               addInitialContinents.map((data, index) => {
                 return (
@@ -147,7 +154,8 @@ export default function Clocks() {
                     <h3>
                       {data.capital}{" "}
                       <span>
-                        {userLocation && setOffset(userLocation, data)}
+                        {userLocation &&
+                          setOffset(userLocation.offset, data.offset)}
                       </span>
                     </h3>
                     <p> {<SetTimer timeState={data.time} needSec={false} />}</p>
