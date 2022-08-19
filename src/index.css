@@ -460,10 +460,9 @@ a,
 }
 .togglebtn span {
   display: flex;
-  justify-content: center;
-  /* align-content: center; */
-  align-items: center;
   gap: 5px;
+  justify-content: center;
+  align-items: center;
 }
 .active-side-light {
   color: #e7e7e7 !important;
