@@ -131,6 +131,8 @@ export default function Alarm() {
       { timeAlarm: time, checked: true, id: generateId() },
       ...d,
     ]);
+    // document.getElementById("input-time").value = "";
+    e.target[0].value = "";
   }
   const renderer = ({ hours, minutes, seconds, completed }) => {
     if (completed) {

@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import "./index.css";
+// import "./index.css";
 
 import Loading from "./component/subsidiaryComp/Loading";
 

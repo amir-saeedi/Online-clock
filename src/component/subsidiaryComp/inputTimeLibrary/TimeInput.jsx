@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 import { isValid } from "./validate";
 
 const TimeInput = ({
-  initTime,
   disabled,
   mountFocus,
   onTimeChange,
@@ -14,7 +13,7 @@ const TimeInput = ({
   onBlurHandler,
   timer = false,
 }) => {
-  const [time, setTime] = useState(initTime || "");
+  const [time, setTime] = useState("");
 
   const _input = useRef(null);
 
@@ -27,9 +26,8 @@ const TimeInput = ({
   });
 
   let lastVal = "";
-
   const onChangeHandler = (val) => {
-    if (val == time) {
+    if (val === time) {
       return;
     }
     if (isValid(val, timer)) {
@@ -54,7 +52,6 @@ const TimeInput = ({
       }
     }
   };
-
   const getType = () => {
     if (type) {
       return type;
@@ -62,6 +59,13 @@ const TimeInput = ({
     return "tel";
   };
 
+  if (time !== "") {
+    if (document.getElementById("input-time")) {
+      if (document.getElementById("input-time").value === "") {
+        setTime("");
+      }
+    }
+  }
   return (
     <input
       name={name ? name : undefined}
@@ -75,6 +79,7 @@ const TimeInput = ({
       onBlur={onBlurHandler ? (e) => onBlurHandler(e) : undefined}
       ref={_input}
       autoComplete="off"
+      id="input-time"
     />
   );
 };

@@ -16,12 +16,16 @@ export default function Modal({ handelAdd, Alarm = false }) {
     toggleShowElement("myModal", "none");
   }
   const onBlurHandler = (event) => {
+    if (event.target.value.length === 5) {
+      return setDisableBtn(false);
+    }
+    return setDisableBtn(true);
     // console.log("you left ", event.target.value);
   };
 
   const onTimeChangeHandler = (val) => {
     if (val.length === 5) {
-      setDisableBtn(false);
+      return setDisableBtn(false);
     }
   };
 
@@ -39,6 +43,8 @@ export default function Modal({ handelAdd, Alarm = false }) {
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "flex-end",
+                gap: "30px",
+                flexWrap: "wrap",
               }}
             >
               <TimeInput
